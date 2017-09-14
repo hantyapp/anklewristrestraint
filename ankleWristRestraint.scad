@@ -14,10 +14,30 @@ totalHeight = ankleSize + wristSize + collarWidth*2 + wristToAnkleSpacing;
 totalWidth = ankleSize + collarWidth*2 + ankleSpacing;
 intRemHeight = ankleSize + wristSize + wristToAnkleSpacing;
 
-//leftSideTabs();
-//rightSideTabs();
+leftSideTabs();
+rightSideTabs();
+midTabs();
+leftFill();
 rightFill();
-//baseMid();
+baseMid();
+
+module leftFill()
+{
+        union()
+    {
+        difference()
+        {
+            baseShape();
+            union()
+            {
+                translate([0,-ankleSize,0])
+                {
+                    square(totalHeight);
+                }
+            }
+        }
+    }
+}
 
 module rightFill()
 {
@@ -28,21 +48,15 @@ module rightFill()
             baseShape();
             union()
             {
-                translate([0,-ankleSize/2,0])
+                translate([0,-ankleSize,0])
                 {
-                    translate([-intRemHeight,0,0])
+                    translate([-intRemHeight+wristSize/2,0,0])
                     {
                         square(totalHeight);
                     }
                 }
-                translate([-((ankleSize/2)+collarWidth),-(ankleSize/2+collarWidth/2),0])
-                {
-                    square([ankleSize+ankleSpacing/2+collarWidth,totalHeight]);
-                }
             }
         }
-        //hingeTab();
-        //lockTab();
     }
 }
 
