@@ -1,7 +1,7 @@
 // Ankle to wrist retraint
 $fa=3;
 // All values in MM
-// Hole sizes in Diameter
+// Hole sizes are Diameter
 // Variables
 ankleSize = 70; //Size of the ankle Holes
 wristSize = 60; // Size of the wrist holes
@@ -9,17 +9,48 @@ ankleSpacing = 20; // Space between the ankles
 wristToAnkleSpacing = 20; // Space between the wrists and ankles
 screwDia = 5; // Screw hole diameter
 collarWidth = 30; // Width of the cuffs
-
+//Calculated Variables
 totalHeight = ankleSize + wristSize + collarWidth*2 + wristToAnkleSpacing;
 totalWidth = ankleSize + collarWidth*2 + ankleSpacing;
 intRemHeight = ankleSize + wristSize + wristToAnkleSpacing;
 
-leftSideTabs();
-rightSideTabs();
+//leftSideTabs();
+//rightSideTabs();
 midTabs();
-leftFill();
-rightFill();
-baseMid();
+//leftFill();
+//rightFill();
+//baseMid();
+
+//screwSub()baseShape();
+
+module screwHoles()
+{
+    holesAroundHole(ankleSize, collarWidth/2, 12, screwDia);
+    translate([50,50,50])
+    {
+        circle(d=screwDia);
+    }
+}
+
+module holesAroundHole (holeDiameter, collarWidth, countOfHoles, screwDiameter, offSet = 0)
+{
+    rotate([0,0,offSet])
+    {
+        pathRadius = holeDiameter/2 + (collarWidth / 2);
+        for (i=[1:countOfHoles])  {
+            translate([pathRadius*cos(i*(360/countOfHoles)),pathRadius*sin(i*(360/countOfHoles)),0]) circle(d=screwDiameter);
+            }
+        }
+}
+
+module screwSub()
+{
+    difference()
+    {
+        children();
+        screwHoles();
+    }
+}
 
 module leftFill()
 {
@@ -86,8 +117,13 @@ module midTabs()
             {
                 square([ankleSize/2,ankleSize/2+collarWidth]);
             }
+            translate([ankleSize/2, 0, 0]) //TODO work out the spacing from 0 to the bottom edge
+            {
+                square([ankleSpacing, ankleSpacing]);
+            }
         }
     }
+    
 }
 
 
